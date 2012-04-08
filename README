@@ -1,0 +1,12 @@
+SampleVis is an interactive multi-form display of the top 20 artists in music, completed as a project for CS 838 @ UW Madison (~3 weeks dev time).
+The purpose of the project was to gain familiarity with the D3 javascript library and demonstrate some of the knowledge gained about visualizations in the course thus far.
+
+Data was graciously supplied by WhoSampled.com, and is in the file whosampled_top20_sampled_artists.csv
+
+There are two main sections of code, the java code and the markup / clientside code.  
+
+The java code is located under the java/ folder and includes all of the code used to read in the supplied CSV, put it into a SQLite database (data.db), query the database for information, wrap it into a manageable state for D3, and write the data out to JSON.
+
+The clientside code contains the meat of the application, which is all of the javascript used to generate the interface and interactions.
+
+Thanks for looking!

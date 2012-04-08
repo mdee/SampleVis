@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)http://webmdee.com/samplevis -->
+<html>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>SampleVis</title>
+    <link rel="SHORTCUT ICON" href="http://www.webmdee.com/favicon2.png">
+	<link rel="stylesheet" type="text/css" href="./SampleVis_files/1140.css"><link rel="stylesheet" type="text/css" href="./SampleVis_files/styles.css"><link rel="stylesheet" type="text/css" href="./SampleVis_files/ie.css"><script><script type="text/javascript" src="./SampleVis_files/jquery-1.7.1.min.js"></script><link type="text/css" rel="stylesheet" href="data:text/css,">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="twelvecol">
+          <div id="header-block">
+            <h1><a href="http://webmdee.com/">WebMDee.com</a></h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/container-->
+    <div class="container">
+      <div class="row">
+        <div class="twelvecol">
+          <div id="quote-block">
+            <span>It's MDee. On the web.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/container-->
+	<style>
+      body {
+        background: #302b54; 
+        color: #CDCDCD;
+        min-width: 1140px;
+      }
+      #multisel-btn {
+           margin: 10px 0px;
+           cursor: pointer;
+           height:40px; 
+           width:100%;
+           background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #292929), color-stop(1, #383838) );
+           background:-moz-linear-gradient( center top, #292929 5%, #383838 100% );
+           background: #292929;
+           border-radius:3px;
+           border:1px solid #FFF;
+      }#multisel-btn:hover {
+           background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #383838), color-stop(1, #292929) );
+           background:-moz-linear-gradient( center top, #383838 5%, #292929 100% );
+           background: #383838;
+      }#multisel-btn:active {
+           position:relative;
+           top: 1px;
+      }
+      #intro-text {
+        margin: 20px 0px;
+      }
+      p span {
+        font-size: 25px;
+        line-height: 35px;
+      }
+      div a {
+        color: #6183A6;
+      }
+      div, h1 a {
+        color : #CDCDCD;
+      }
+	  line {
+		  stroke: #CDCDCD;
+          fill: #CDCDCD;
+	  }
+	  #linegraph-block {
+          height:280px;
+	  }
+      #sunburst-block {
+          height: 1110px;
+      }
+	  .title-text {
+		  font-size: 18pt;
+		  font-weight: bold;
+		  margin-top: .5em;
+		  margin-bottom: .5em;	  
+          color: #CDCDCD;
+	  }
+      .link {
+        fill: none;
+        stroke: black;
+        stroke-width: 1.5px;
+      }
+	  .selected, .selected-circle {
+		stroke: #FFF;
+		stroke-width: 3;
+	  }
+	</style>
+  
+  
+    <div class="container">
+      <div class="row">
+        <div class="twelvecol">
+          <div id="intro-text">
+            <p style="text-indent:50px">
+              <span>SampleVis is an interactive multi-form display of the top 20 most <a href="http://en.wikipedia.org/wiki/Sampling_(music)" target="_blank">sampled</a> artists in music.  It was built using <a href="http://mbostock.github.com/d3/" target="_blank">D3</a>, with data supplied by <a href="http://whosampled.com/" target="_blank">WhoSampled.com</a>. SampleVis allows you to view information on when and how many times these artists were sampled over the years, as well as view all of the songs that sample them. A modern browser that supports <a href="http://en.wikipedia.org/wiki/Scalable_Vector_Graphics" target="_blank">SVG</a> is required.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+	  <div class="row">
+		<div class="twelvecol" style="text-align:center;">
+          <div id="artist-treemap">
+            <div class="title-text">
+              <span>Top 20 Sampled Artists</span>
+            </div>
+            <div style="padding:10px 0px; text-align:center; font-size:18px; line-height:35px;">
+             Click a cell to view a graph of the amount of samples over time for an artist (clicking again deselects). You can superimpose multiple graphs by enabling multiple artist selection (click the button to the left). Selecting a single artist with that option disabled allows you to see more information with the <a href="http://webmdee.com/samplevis#sample-sunburst">sample sunburst</a> and <a href="http://webmdee.com/samplevis#sample-dendrogram">sample dendrogram</a> (a.k.a. the 'deep dive'). 
+            </div>
+            <div style="width:250px;">
+              <div id="multisel-btn" onclick="">
+                <span>Enable multiple artist selection (disable deep dive)</span>
+              </div>
+            </div>
+          </div>
+		</div>
+   	  </div>
+      <div class="row">
+        <div class="twelvecol" style="text-align:center;">
+    	  <div id="treemap"><svg width="1100" height="300" text-anchor="middle"><g transform="translate(0,0)"><g transform="translate(0,0)" class="cell"><rect style="cursor: pointer; " class="unselected" id="rect-undefined"></rect><text x="550" style="font-size: 12px; cursor: pointer; opacity: 1; " y="150" dy=".35em" text-anchor="middle" id="name-undefined" class="rect-text"></text><text x="550" y="240" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-undefined" class="rect-text"></text></g><g transform="translate(4,4)" class="cell"><rect style="fill: #393b79; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-861" height="65.28" width="134.4"></rect><text x="70" style="font-size: 12px; cursor: pointer; opacity: 1; " y="34" dy=".35em" text-anchor="middle" id="name-861" class="rect-text">Funkadelic</text><text x="70" y="54.4" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-861" class="rect-text">291 samples</text></g><g transform="translate(4,72)" class="cell"><rect style="fill: #5254a3; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-66" height="65.28" width="134.4"></rect><text x="70" style="font-size: 12px; cursor: pointer; opacity: 1; " y="34" dy=".35em" text-anchor="middle" id="name-66" class="rect-text">LL Cool J</text><text x="70" y="54.4" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-66" class="rect-text">291 samples</text></g><g transform="translate(4,140)" class="cell"><rect style="fill: #6b6ecf; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-297" height="72" width="134.4"></rect><text x="70" style="font-size: 12px; cursor: pointer; opacity: 1; " y="37.5" dy=".35em" text-anchor="middle" id="name-297" class="rect-text">Beastie Boys</text><text x="70" y="60" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-297" class="rect-text">322 samples</text></g><g transform="translate(4,215)" class="cell"><rect style="fill: #9c9ede; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-128" height="77.75999999999999" width="134.4"></rect><text x="70" style="font-size: 12px; cursor: pointer; opacity: 1; " y="40.5" dy=".35em" text-anchor="middle" id="name-128" class="rect-text">Boogie Down Productions</text><text x="70" y="64.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-128" class="rect-text">349 samples</text></g><g transform="translate(144,4)" class="cell"><rect style="fill: #637939; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-161" height="92.16" width="113.28"></rect><text x="59" style="font-size: 12px; cursor: pointer; opacity: 1; " y="48" dy=".35em" text-anchor="middle" id="name-161" class="rect-text">Jay-Z</text><text x="59" y="76.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-161" class="rect-text">350 samples</text></g><g transform="translate(144,100)" class="cell"><rect style="fill: #8ca252; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-1" height="94.08" width="113.28"></rect><text x="59" style="font-size: 12px; cursor: pointer; opacity: 1; " y="49" dy=".35em" text-anchor="middle" id="name-1" class="rect-text">Isaac Hayes</text><text x="59" y="78.4" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-1" class="rect-text">355 samples</text></g><g transform="translate(144,198)" class="cell"><rect style="fill: #b5cf6b; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-1742" height="94.08" width="113.28"></rect><text x="59" style="font-size: 12px; cursor: pointer; opacity: 1; " y="49" dy=".35em" text-anchor="middle" id="name-1742" class="rect-text">The Beatles</text><text x="59" y="78.4" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-1742" class="rect-text">357 samples</text></g><g transform="translate(262,4)" class="cell"><rect style="fill: #cedb9c; cursor: pointer; " class="unselected" id="rect-261" height="92.16" width="120"></rect><text x="62.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="48" dy=".35em" text-anchor="middle" id="name-261" class="rect-text">Nas</text><text x="62.5" y="76.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-261" class="rect-text">370 samples</text></g><g transform="translate(262,100)" class="cell"><rect style="fill: #8c6d31; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-206" height="92.16" width="120"></rect><text x="62.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="48" dy=".35em" text-anchor="middle" id="name-206" class="rect-text">The Notorious B.I.G.</text><text x="62.5" y="76.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-206" class="rect-text">370 samples</text></g><g transform="translate(262,196)" class="cell"><rect style="fill: #bd9e39; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-2540" height="96" width="120"></rect><text x="62.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="50" dy=".35em" text-anchor="middle" id="name-2540" class="rect-text">Kool &amp; the Gang</text><text x="62.5" y="80" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-2540" class="rect-text">385 samples</text></g><g transform="translate(387,4)" class="cell"><rect style="fill: #e7ba52; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-702" height="90.24" width="129.6"></rect><text x="67.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="47" dy=".35em" text-anchor="middle" id="name-702" class="rect-text">Doug E. Fresh</text><text x="67.5" y="75.2" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-702" class="rect-text">391 samples</text></g><g transform="translate(387,98)" class="cell"><rect style="fill: #e7cb94; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-2390" height="92.16" width="129.6"></rect><text x="67.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="48" dy=".35em" text-anchor="middle" id="name-2390" class="rect-text">Bob James</text><text x="67.5" y="76.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-2390" class="rect-text">397 samples</text></g><g transform="translate(387,194)" class="cell"><rect style="fill: #843c39; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-95" height="97.92" width="129.6"></rect><text x="67.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="51" dy=".35em" text-anchor="middle" id="name-95" class="rect-text">Michael Jackson</text><text x="67.5" y="81.6" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-95" class="rect-text">427 samples</text></g><g transform="translate(522,4)" class="cell"><rect style="fill: #ad494a; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-693" height="79.67999999999999" width="160.32"></rect><text x="83.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="41.5" dy=".35em" text-anchor="middle" id="name-693" class="rect-text">Eric B. &amp; Rakim</text><text x="83.5" y="66.4" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-693" class="rect-text">428 samples</text></g><g transform="translate(522,87)" class="cell"><rect style="fill: #d6616b; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-2890" height="89.28" width="160.32"></rect><text x="83.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="46.5" dy=".35em" text-anchor="middle" id="name-2890" class="rect-text">Lyn Collins</text><text x="83.5" y="74.4" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-2890" class="rect-text">476 samples</text></g><g transform="translate(522,180)" class="cell"><rect style="fill: #e7969c; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-626" height="111.36" width="160.32"></rect><text x="83.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="58" dy=".35em" text-anchor="middle" id="name-626" class="rect-text">Run-DMC</text><text x="83.5" y="92.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-626" class="rect-text">591 samples</text></g><g transform="translate(689,4)" class="cell"><rect style="fill: #7b4173; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-3362" height="87.36" width="205.44"></rect><text x="107" style="font-size: 12px; cursor: pointer; opacity: 1; " y="45.5" dy=".35em" text-anchor="middle" id="name-3362" class="rect-text">Fab 5 Freddy</text><text x="107" y="72.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-3362" class="rect-text">600 samples</text></g><g transform="translate(689,95)" class="cell"><rect style="fill: #a55194; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-3058" height="91.2" width="205.44"></rect><text x="107" style="font-size: 12px; cursor: pointer; opacity: 1; " y="47.5" dy=".35em" text-anchor="middle" id="name-3058" class="rect-text">The Winstons</text><text x="107" y="76" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-3058" class="rect-text">624 samples</text></g><g transform="translate(689,190)" class="cell"><rect style="fill: #ce6dbd; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-82" height="101.75999999999999" width="205.44"></rect><text x="107" style="font-size: 12px; cursor: pointer; opacity: 1; " y="53" dy=".35em" text-anchor="middle" id="name-82" class="rect-text">Public Enemy</text><text x="107" y="84.8" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-82" class="rect-text">701 samples</text></g><g transform="translate(903,4)" class="cell"><rect style="fill: #de9ed6; cursor: pointer; opacity: 0.8173353818074074; " class="unselected" id="rect-619" height="280.32" width="185.28"></rect><text x="96.5" style="font-size: 12px; cursor: pointer; opacity: 1; " y="146" dy=".35em" text-anchor="middle" id="name-619" class="rect-text">James Brown</text><text x="96.5" y="233.6" style="font-size: 12px; cursor: pointer; opacity: 1; " dy=".35em" text-anchor="middle" id="count-619" class="rect-text">1730 samples</text></g></g></svg></div>
+		  <div style="float:right;">
+		    <span>Source: <a target="_blank" href="http://whosampled.com/">WhoSampled.com</a></span>
+		  </div>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <div class="twelvecol" style="text-align:center;">
+		  <div id="linegraph-cont">
+		  	<div id="linegraph-block"></div>
+		  </div>
+	    </div>
+	  </div>
+      <script type="text/javascript" src="./SampleVis_files/d3.v2.min.js"></script>      <script>
+
+		  // Sets multi-select flag based on button click and changes the button text
+          $(document).ready(function(){
+            $('#multisel-btn').on('click', function(){
+                multiSelectEnabled = !multiSelectEnabled;
+                var btnText = (multiSelectEnabled) ? 'Disable multiple artist selection (enable deep dive)' : 'Enable multiple artist selection (disable deep dive)';
+                $('#multisel-btn').html('<span>'+btnText+'</span>');
+            });
+          });
+
+		  // Array which holds the IDs of selected artist(s)
+		  var selectedIds = new Array();
+		  // Maps artist IDs to artist names
+		  var artists = new Object();
+		  // Maps artist IDs to the number of times they've been sampled
+          var artistCounts = new Object();
+		  // Stores all artist names
+          var artistNames = new Array();
+		  // D3 20 color scale used for treemap
+          var color = d3.scale.category20b();
+		  // Another scale used for sunburst legend
+          var c = d3.scale.category20();
+          var multiSelectEnabled = false;
+
+	      var w = 1100,
+		      h = 300;
+
+		  // Create treemap of sampled artists
+		  var treemap = d3.layout.treemap()
+		    	.padding(4)
+		    	.size([w, h])
+		    	.value(function(d) { return d.size; });
+
+		  var svg = d3.select("#treemap").append("svg")
+		  		.attr("width", w)
+		    	.attr("height", h)
+				.attr("text-anchor", "middle")
+		  		.append("g") // This is the container for the svg g elements, which are graphic elements.  Group related g elements.
+		    	.attr("transform", "translate(0,0)"); // This pads. X coord is padding-left, Y coord is padding-top
+
+		  // Fetch the data about sampled artists and how many times they've been sampled
+		  d3.json("../json/sampledArtists.json", function(json) {
+		  	  for (var i=0; i<json['children'].length; i++) {
+			      artists[json['children'][i].id] = json['children'][i].name;
+                  artistCounts[json['children'][i].id] = json['children'][i].size;
+                  artistNames.push(json['children'][i].name);
+			  }
+
+		      var cell = svg.data([json]).selectAll("g")
+		      	  	.data(treemap)
+		      	  	.enter().append("g")
+		      	  	.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+		      	  	.attr("class", "cell")
+
+		  	  cell.append("rect")
+		      		.style("fill", function(d) { return d.children ? null : color(d.data.id); })
+					.style("cursor", "pointer")
+					.attr("class", "unselected")
+					.on("mouseover", mouseOpacity(.15))
+					.on("mouseout", mouseOpacity(1))
+					.on("click", function(d) {
+						addSelectedId(d.data.id);
+						if (idHasBeenSelected(d.data.id)) {
+							/*
+							 *  Added the 'selected' class for filtering on mouse events
+							 *  Add a border to the rectangle
+							 */
+					    	d3.select(this)
+								.classed("unselected",false)
+								.classed("selected", true)
+						} else {
+					    	d3.select(this)
+								.classed("selected",false)
+								.classed("unselected", true);
+						}
+						getYearSamples();
+                        // clear the sunburst and dendrogram on click
+                        $('#sunburst-block').html('');
+                        $('#dendrogram-block').html('');
+                        if (!multiSelectEnabled && idHasBeenSelected(d.data.id)) {
+                            // If multi-select is off and they've chosen a new artist, show its sunburst
+                            setTimeout(function() {getArtistSunburst(d.data.id); getArtistDendrogram(d.data.id);}, 350);
+                        }
+					})
+					.attr("id", function(d) { return "rect-" + d.data.id; })
+					.transition().duration(1000)
+		      	  	.attr("width", function(d) { return d.children ? null : .96 * d.dx; })
+		      		.attr("height", function(d) { return d.children ? null : .96 * d.dy; });
+
+		  	  cell.insert("text")
+		      		.attr("x", function(d) { return d.dx / 2; })
+					.style("opacity", 0)
+		      		.attr("y", function(d) { return d.dy / 2; })
+		      		.attr("dy", ".35em") // vertical-align: middle
+		      		.attr("text-anchor", "middle")
+		      		.style("font-size", "12")
+					.attr("id", function(d) { return "name-" + d.data.id })
+		      		.attr("class", "rect-text")
+		      		.text(function(d) { return d.children ? null : d.data.name})
+                    .on("mouseover", mouseOpacity(.15))
+                    .on("mouseout", mouseOpacity(1))
+                    .on("click", function(d) {
+						addSelectedId(d.data.id);
+						if (idHasBeenSelected(d.data.id)) {
+							/*
+							 *  Added the 'selected' class for filtering on mouse events
+							 *  Add a border to the rectangle
+							 *  -- This was done so that the user can click the text and still get the effect of clicking the rectangle
+							 */
+					    	d3.select("#rect-"+d.data.id)
+								.classed("unselected",false)
+								.classed("selected", true)
+						} else {
+					    	d3.select("#rect-"+d.data.id)
+								.classed("selected",false)
+								.classed("unselected", true);
+						}
+						getYearSamples();
+                        // clear the sunburst on click
+                        $('#sunburst-block').html('');
+                        $('#dendrogram-block').html('');
+                        if (!multiSelectEnabled && idHasBeenSelected(d.data.id)) {
+                            // If multi-select is off and they've chosen a new artist, show its sunburst
+                            setTimeout(function() {getArtistSunburst(d.data.id); getArtistDendrogram(d.data.id);}, 550);
+                        }
+                    })
+					.transition().duration(1500)
+					.style("opacity", 1)
+                    .style("cursor", "pointer");
+
+
+		  	  cell.insert("text")
+		      		.attr("x", function(d) { return d.dx / 2; })
+		      		.attr("y", function(d) { return d.dy / 1.25; })
+					.style("opacity", 0)
+		      		.attr("dy", ".35em") // vertical-align: middle
+		      		.attr("text-anchor", "middle")
+					.attr("id", function(d) { return "count-" + d.data.id })
+		      		.style("font-size", "12")
+		      		.attr("class", "rect-text")
+		      		.text(function(d) { return d.children ? null : d.data.size + " samples";})
+                    .on("mouseover", mouseOpacity(.15))
+                    .on("mouseout", mouseOpacity(1))
+                    .on("click", function(d) {
+						addSelectedId(d.data.id);
+						if (idHasBeenSelected(d.data.id)) {
+							/*
+							 *  Added the 'selected' class for filtering on mouse events
+							 *  Add a border to the rectangle
+							 */
+					    	d3.select("#rect-"+d.data.id)
+								.classed("unselected",false)
+								.classed("selected", true)
+						} else {
+					    	d3.select("#rect-"+d.data.id)
+								.classed("selected",false)
+								.classed("unselected", true);
+						}
+						getYearSamples();
+                        // clear the sunburst on click
+                        $('#sunburst-block').html('');
+                        $('#dendrogram-block').html('');
+                        if (!multiSelectEnabled && idHasBeenSelected(d.data.id)) {
+                            // If multi-select is off and they've chosen a new artist, show its sunburst
+                            setTimeout(function() {getArtistSunburst(d.data.id); getArtistDendrogram(d.data.id);}, 550);
+                        }
+                    })
+			  		.transition().duration(2000)
+					.style("opacity", 1)
+                    .style("cursor", "pointer");
+					
+          });
+
+		/**
+ 		 * Function which changes the opacity of blocks other than the one that was moused over to the value supplied
+		 */
+		function mouseOpacity(opacity) {
+			return function(g,i) {
+				d3.selectAll("g.cell rect.unselected")
+					.filter(function(d) {
+						return (d.children) ? false : d.data.index != i;
+					}).transition().duration(750).style("opacity",opacity);
+			};
+		};
+
+	    /**
+  		 * Simple helper which returns true if this artist ID has been selected for further viewing
+		 */
+		function idHasBeenSelected(id) {
+			for (var i=0; i<selectedIds.length; i++) {
+				if (selectedIds[i] == id) {
+					return true;
+				}
+			}
+			return false;
+		};
+
+
+		/**
+ 		 * Helper which handles when an artist is selected.
+		 * If it has been selected previously, this action is treated as a deselection.
+		 * Otherwise, if multi-select is enabled the ID is added.
+		 */
+		function addSelectedId(id) {
+			for (var i=0; i<selectedIds.length; i++) {
+				if (selectedIds[i] === id) {
+					// need to slice it out, viewed as a de-selection
+					selectedIds.splice(i,1);
+                    d3.select("#rect-"+id)
+                        .classed("selected", false)
+                        .classed("unselected", true);
+                    return;
+				}
+			}
+            if (multiSelectEnabled) {
+			    selectedIds.push(id);
+            } else {
+				// Deselection
+                d3.selectAll("g.cell rect.selected")
+                    .classed("selected", false)
+                    .classed("unselected", true);
+                selectedIds = [id];
+            }
+		}
+
+
+		// The next two methods are hacky helpers to get the year-sample count data into an easily managed state
+		function createProperDictionarySize(length) {
+			var dict = new Object();
+			for (var i=0; i<length;i++) {
+				dict[i] = 0;
+			}
+			return dict;
+		}
+
+		function createLineGraphDictionary(year, yearDataDict) {
+			var dict = new Object();
+			dict['x'] = year;
+			for (key in yearDataDict) {
+				dict[key] = yearDataDict[key];
+			}
+			return dict;
+		}
+
+
+		/**
+ 		 * After an artist is selected, a linegraph charting the amount of samples for each year is drawn
+		 * This function takes care of getting the appropriate data and graphing it
+		 */
+		function getYearSamples() {
+			d3.json("../json/yearsArtSampled.json", function(jsonResp) {
+			    $('#linegraph-block').html('');
+
+				if (selectedIds.length == 0) {
+					d3.selectAll("g.cell rect")
+						.transition()
+						.duration(750).style("opacity", 1);
+					return;
+				}
+
+				var maxVal = 0;
+				var years = d3.range(1960,2013,1);
+				var allData = new Object();
+
+				for (var i=0; i<years.length; i++) {
+					allData[years[i]] = createProperDictionarySize(selectedIds.length);
+				}
+
+				// This is a counter which is used to ID each superimposed line on the chart about to be drawn
+				var lineIndex = 0;
+
+				// Graphs can be superimposed, so we need to get the data about all of the selected artists
+				for (var i=0; i<selectedIds.length; i++) {
+					var jsonData = jsonResp[selectedIds[i]];
+					for (var j=0; j<jsonData.length; j++) {
+						var year = parseInt(jsonData[j].year);
+						var count = parseInt(jsonData[j].count);
+						var oldData = allData[year];
+						oldData[lineIndex] = count;
+						maxVal = Math.max(maxVal, count);
+						allData[year] = oldData;
+					}		
+					lineIndex += 1;
+				}
+				var data = new Array();
+				for (key in allData) {
+					var yearDataDict = allData[key];
+					data.push(createLineGraphDictionary(key, yearDataDict));
+				}
+
+				var w = 800
+					h = 175,
+					p = 50,
+					x = d3.scale.linear().domain([1960,2013]).range([0, w]),
+					y = d3.scale.linear().domain([0, maxVal]).range([h, 0]);
+
+				var vis = d3.select("#linegraph-block")
+					.data([data])
+					.append("svg")
+					.attr("id", "linegraph")
+					.attr("width", w + p * 2)
+					.attr("height", h + p * 2)
+					.attr("text-anchor", "middle")
+					.append("g")
+					.attr("transform", "translate(" + p + "," + p + ")")
+
+				var rules = vis.selectAll("g.rule")
+					.data(x.ticks(15))
+					.enter().append("g")
+					.attr("class", "rule");
+
+			// Draw grid lines
+			rules.append("line")
+				.attr("class", function(d) { return d ? null : "axis"; })
+				.data(y.ticks(6))
+				.attr("y1", y)
+				.attr("y2", y)
+				.attr("x1", 0)
+                .style("stroke", "#CDCDCD")
+                .style("opacity", .8)
+				.attr("x2", w - 10);
+
+			rules.append("text")
+				.attr("x", x)
+				.attr("y", h + 15)
+				.attr("dy", ".71em")
+				.attr("text-anchor", "middle")
+                .style("fill", "#CDCDCD")
+				.text(x.tickFormat(20))
+				.text(String);
+
+			rules.append("text")
+				.data(y.ticks(6))
+				.attr("y", y)
+				.attr("x", -10)
+				.attr("dy", ".35em")
+				.attr("text-anchor", "end")
+                .style("fill", "#CDCDCD")
+				.text(y.tickFormat(15));
+
+				var lineIndex = 0;
+
+				vis.append("text")
+					.attr("x", w/2)
+					.attr("y", -25)
+					.style("class", "title-text")
+					.text("Amount of samples from 1960 - 2012")
+                    .style("font-size", "15pt")
+                    .style("fill", "#CDCDCD");
+
+				for (var i=0; i<selectedIds.length; i++) {
+					vis.append("path")
+						.attr("class", "line")
+						.attr("fill", "none")
+						.attr("stroke", function(d){ return color(selectedIds[i]) })
+						.attr("stroke-width", 3)
+						.attr("d", d3.svg.line()
+						.x(function(d) { return x(d.x); })
+						.y(function(d) { return y(d[lineIndex]); }));
+						
+					vis.selectAll("circle.line-"+i)
+						.data(data)
+						.enter().append("circle")
+						.attr("class", "line")
+						//.attr("stroke", "black")
+						//.attr("stroke-width", .2)
+						.attr("fill", function(d){ return color(selectedIds[i]); })
+						.attr("cx", function(d) { return x(d.x); })
+						.attr("cy", function(d) { return y(d[lineIndex]);})
+						.attr("r", 2);
+
+					lineIndex += 1;
+				}
+			});
+		};
+      </script>
+      <div class="row">
+        <div class="twelvecol">
+          <div id="sample-sunburst">
+            <div id="sunburst-legend-title" style="text-align:center;">
+              <div class="title-text"><span>Sampled artist deep dive</span></div>
+                <div style="text-align:center; font-size:18px; line-height:35px;">
+              <span>Select an artist above in the <a href="http://webmdee.com/samplevis#artist-treemap">artist treemap</a> to view a visual representation of their sampled songs and the songs that sample them (N.B. - multiple artist selection must be disabled). <span style="color:#42C0FB;">If nothing is showing up, just be patient, it may take a few seconds to load.</span> There are three layers to the 'sunburst' that appears: the center, the black segmented ring, and the outer segmented ring. Each black segment represents an original song by this artist that was sampled, and its size is also representative of the number of times that it was sampled.  By mousing over the black segment, you can view the original song's information (it will appear in the center). The colored, outer segments represent the sampling songs; they're placed along the outer edge of the original song that they sampled. The sampling songs (outer segments) are color coded by the part of the original song that they sampled, as detailed below. If you want to dig deeper, you can click on any of the black segments to see the titles of the songs that sample it in the <a href="http://webmdee.com/samplevis#sample-dendrogram">sample dendrogram</a>.
+                </span></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div id="sunburst-legend-block">
+            <svg width="1140" height="75"><g transform="translate(40,40)"><rect class="legend-color" x="0" y="20" stroke="#1f77b4" fill="#1f77b4" height="7" width="40"></rect><rect class="legend-color" x="190" y="20" stroke="#aec7e8" fill="#aec7e8" height="7" width="40"></rect><rect class="legend-color" x="380" y="20" stroke="#ff7f0e" fill="#ff7f0e" height="7" width="40"></rect><rect class="legend-color" x="570" y="20" stroke="#ffbb78" fill="#ffbb78" height="7" width="40"></rect><rect class="legend-color" x="760" y="20" stroke="#2ca02c" fill="#2ca02c" height="7" width="40"></rect><rect class="legend-color" x="949.9999999999999" y="20" stroke="#98df8a" fill="#98df8a" height="7" width="40"></rect><text class="legend-text" x="50" y="25" style="fill: #cdcdcd; ">Whole track</text><text class="legend-text" x="240" y="25" style="fill: #cdcdcd; ">Drum loop</text><text class="legend-text" x="430" y="25" style="fill: #cdcdcd; ">Bassline</text><text class="legend-text" x="620" y="25" style="fill: #cdcdcd; ">Vocals / lyrics</text><text class="legend-text" x="810" y="25" style="fill: #cdcdcd; ">Hook / riff</text><text class="legend-text" x="999.9999999999999" y="25" style="fill: #cdcdcd; ">Other</text></g></svg></div>
+          </div>
+        </div>
+      </div>
+      <script>
+
+		/*
+		 * This creates a legend for the sunburst graphic
+		 */
+
+        var w = 1140,
+            h = 75;
+
+        var x = d3.scale.linear().domain([0,6]).range([0, w]);
+
+        var legendData = [{'desc': 'Whole track', 'val': '0'}, {'desc': 'Drum loop', 'val': '1'}, {'desc': 'Bassline', 'val': '2'}, {'desc': 'Vocals / lyrics', 'val': '3'}, {'desc': 'Hook / riff', 'val': '4'}, {'desc': 'Other', 'val': 'X'}];
+
+        var legend = d3.select("#sunburst-legend-block")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h)
+                .append("g")
+                .attr("transform", "translate(" + 40 + "," + 40 + ")");
+
+
+        legend.selectAll(".legend-color")
+            .data(legendData)
+            .enter().append("rect")
+                   .attr("class", "legend-color")
+                   .attr("x", function(d,i) { return  x(i); })
+                   .attr("y", 20)
+                   .attr("stroke", function(d,i){return c(d.val);})
+                   .attr("fill", function(d,i){return c(d.val);})
+                   .attr("height", 7)
+                   .attr("width", 40);
+
+
+        legend.selectAll(".legend-text")
+            .data(legendData)
+            .enter().append("text")
+                .attr("class", "legend-text")
+                .attr("x", function(d,i) { return x(i) + 50; })
+                .attr("y", 25)
+                .style("fill", "#CDCDCD")
+                .text(function(d) { return d.desc; })
+
+      </script>
+      <div class="row">
+        <div class="twelvecol">
+          <div id="sunburst-cont">
+            <div id="sunburst-block" style="text-align:center;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+              
+		/**
+		 * When a single artist is selected, a sunburst visualization of their sampled tracks and the tracks that sample them is drawn.
+		 * This method takes care of that
+		 */ 
+        function getArtistSunburst(sbArtId) {
+            
+            var w = 1140,
+                h = 1100,
+                r = Math.min(w, h) / 2;
+
+            var vis = d3.select("#sunburst-block").append("svg")
+                        .attr("width", w)
+                        .attr("height", h)
+                        .attr("id", "sunburst-svg")
+                        .append("g")
+                        .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+
+            var partition = d3.layout.partition()
+                              .sort(null)
+                              .size([2 * Math.PI, r * r])
+                              .value(function(d) { return 1; });
+
+            var arc = d3.svg.arc()
+                        .startAngle(function(d) { return d.x; })
+                        .endAngle(function(d) { return d.x + d.dx; })
+                        .innerRadius(function(d) { return Math.sqrt(d.y); })
+                        .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
+
+            d3.json("../json/" + sbArtId + "/samplingTracks.json", function(json) {
+                var path = vis.data([json]).selectAll("path")
+                    .data(partition.nodes)
+                    .enter().append("path")
+                    .attr("d", arc)
+                    .attr("fill-rule", "evenodd")
+                    .style("stroke", "#FFF")
+                    .style("cursor", function(d) {
+						/*
+						 * Hacky way to determine if this current element is a sampled track or a sampling track
+						 * Sampled tracks have all of their information concatenated into the 'name' attribute with each field separated by '_'
+						 */
+                        if (d.children) {
+                            var nameSplit = d.name.split('_');
+                            if (nameSplit.length > 1) {
+                                return "pointer";
+                            }
+                        }
+                        return "default";
+                    })
+                    .style("fill", function(d) { 
+                        if (d.children) {
+                            var nameSplit = d.name.split('_');
+                            if (nameSplit.length > 1) {
+                                return "black"
+                            } else {
+                                return color(parseInt(nameSplit[0]));
+                            }
+                        } else {
+                            return c(d.partSampled);
+                        }
+                   })
+                   .on("mouseover",function(d,i) {
+                       if (d.children) {
+                           var nameSplit = d.name.split('_');
+                           if (nameSplit.length > 1) {
+
+                                d3.select(this)
+                                    .transition().duration(1000)
+                                    .style("opacity", .6)
+                                    .style("fill","#FFF"); 
+                                var title = nameSplit[1];
+                                var year = nameSplit[2];
+                                var genre = nameSplit[4];
+                                var albumTitle = nameSplit[6];
+                                var count = d.children.length;
+                                d3.select("#sb-track-title")
+                                  .text(title)
+                                  .transition().duration(500)
+                                  .style("opacity", 1);
+
+                                d3.select("#sb-album-title")
+                                    .text(albumTitle + " (" + year + ")")
+                                    .transition().duration(500)
+                                    .style("opacity", 1);
+
+                                d3.select("#sb-sample-count")
+                                    .text("# of sampling tracks: " + count)
+                                    .transition().duration(500)
+                                    .style("opacity",1);
+                           }
+                       }
+                     })
+                   .on("mouseout", function(d,i) {
+                       if (d.children) {
+                           var nameSplit = d.name.split('_');
+                           if (nameSplit.length > 1) {
+                                d3.select(this)
+                                    .transition().duration(750)
+                                    .style("opacity", 1)
+                                    .style("fill", "black");
+
+                                var title = nameSplit[1];
+                                d3.select("#sb-track-title")
+                                  .transition().duration(2000)
+                                  .style("opacity", 0);
+                                d3.select("#sb-album-title")
+                                  .transition().duration(2000)
+                                  .style("opacity", 0);
+                                d3.select("#sb-sample-count")
+                                  .transition().duration(2000)
+                                  .style("opacity", 0);
+                           }
+                       }
+                   })
+                   .on("click", function(d,i) {
+                     if (d.children) {
+                         var nameSplit = d.name.split('_');
+                         if (nameSplit.length > 1) {
+                             console.log(nameSplit[0]);
+                             var dTitlePos = $('#dendro-title-'+nameSplit[0]).offset();
+                             window.scrollTo(dTitlePos.left,dTitlePos.top);
+                             console.log(dTitlePos);
+                         }
+                     }
+                   });
+
+                   var artistNameText = vis.append("text")
+                                        .attr("dx", 1)
+                                        .attr("dy", "0em")
+                                        .style("fill", "black")
+                                        .attr("id", "sb-art-name")
+                                        .style("text-anchor", "middle")
+                                        .style("font-size", "15pt")
+                                        .text(artists[sbArtId]);
+
+                   var trackTitle = vis.append("text")
+                                        .attr("dx", 1)
+                                        .attr("dy", "1.5em")
+                                        .attr("id", "sb-track-title")
+                                        .style("text-anchor", "middle")
+                                        .style("font-size", "20pt")
+                                        .style("opacity", 0);
+
+                   var albumTitle = vis.append("text")
+                                        .attr("dx", 1)
+                                        .attr("dy", "4em")
+                                        .attr("id", "sb-album-title")
+                                        .style("text-anchor", "middle")
+                                        .style("font-size", "15pt")
+                                        .style("opacity", 0);
+
+                   var genre  = vis.append("text")
+                                        .attr("dx", 1)
+                                        .attr("dy", "4.5em")
+                                        .attr("id", "sb-sample-count")
+                                        .style("text-anchor", "middle")
+                                        .style("font-size", "20pt")
+                                        .style("opacity", 0);
+
+                });
+                
+            }
+      </script>
+	  <div class="row">
+	    <div class="twelvecol" style="text-align:center;">
+		  <div id="dendrogram-cont">
+            <div id="sample-dendrogram">
+              <div class="title-text">An even deeper dive...</div>
+              <div style="text-align:center; font-size:18px; line-height:35px;">For those that want to hear some of these samples and their source material, SampleVis also has a complete sample <a href="http://en.wikipedia.org/wiki/Dendrogram" target="_blank">dendrogram</a> for each of these artists, which will appear after you have selected a single artist in the <a href="http://webmdee.com/samplevis#artist-treemap">artist treemap</a>. The root or leftmost element is the original artist, with the next level comprised of their original songs that were sampled. The leaves or rightmost elements are the sampling song titles, also color-coded in the same manner as the <a href="http://webmdee.com/samplevis#sample-sunburst"> sample sunburst</a> above. One additional piece of information is contained within the colored circles next to the sampling song titles, indicating whether or not it was a <span style="color:#d62728"><b>direct sample</b></span> or an <span style="color:#17becf"><b>interpolation</b></span> (defined <a href="http://en.wikipedia.org/wiki/Interpolation_(music)#In_rap_music" target="_blank">here</a>). Want to hear to hear the sample in action? Click on any of the rightmost song titles to listen to it on <a href="http://whosampled.com/" target="_blank">WhoSampled.com</a>.</div>
+            </div>
+		  	<div id="dendrogram-block" style="min-height:50px;"></div>
+		  </div>
+          <div>
+            <a href="http://webmdee.com/samplevis#artist-treemap">Go back to the treemap</a>
+          </div><br>
+          <div>
+            <span>SampleVis was created as a project for <a href="http://graphics.cs.wisc.edu/WP/vis12/" target="_blank">CS 838</a> in Spring 2012</span>
+          </div>
+	    </div>
+	  </div>
+      <script>
+		/**
+		 * When a single artist is selected, a dendrogram showing all of their sampling tracks is drawn
+		 * Guess what this function does?!
+		 */
+        function getArtistDendrogram(id) {        
+            d3.json("../../sv/" + id + "/samplingTracks.json", function(json) {
+                var w = 1130;
+                    h = artistCounts[id] * 17;
+
+                var cluster = d3.layout.cluster()
+                     .size([h-150, w-300]);
+                  
+                var diagonal = d3.svg.diagonal()
+                            .projection(function(d) { return [.8*d.y, d.x]; });
+                         
+                var vis = d3.select("#dendrogram-block").append("svg")
+                        .attr("width", w)
+                        .attr("height", h)
+                        .append("g")
+                        .attr("transform", "translate(160, 0)");
+
+                var nodes = cluster.nodes(json);
+
+                var link = vis.selectAll("path.link")
+                       .data(cluster.links(nodes))
+                       .enter().append("path")
+                       .attr("class", "link")
+                       .attr("d", diagonal);
+
+                var node = vis.selectAll("g.node")
+                        .data(nodes)
+                        .enter().append("g")
+                        .attr("class", "node")
+                        .attr("transform", function(d) { return "translate(" + .8 * d.y + "," + d.x + ")"; })
+                        
+                node.append("circle")
+                    .attr("r", 4.5)
+                    .attr("fill", function(d){ 
+                        if (d.children) {
+                            return "#CDCDCD";
+                        } else {
+                            return d.sampleType == "S" ? "#d62728" : "#17becf";
+                        }
+                    });
+
+                var ank = node.append("a")
+                    .attr("xlink:href", function(d) { return d.children ? "javascript:void(0);" : d.url; })
+                    .attr("id", function(d){ if (d.children && d.name.split("_").length > 1) { return "dendro-title-" + d.name.split("_")[0]; } return "nahsing";})
+                    .attr("target", "_blank");
+
+                    
+                ank.append("text")
+                    .attr("dx", function(d) { return d.children ? -8 : 8; })
+                    .attr("dy", 3)
+                    .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
+                    .style("fill", function(d) { 
+                        if (d.children) {
+                            var nameSplit = d.name.split('_');
+                            if (nameSplit.length > 1) {
+                                return "#CDCDCD";
+                            } else {
+                                return color(parseInt(nameSplit[0]));
+                            }
+                        } else {
+                                return c(d.partSampled);
+                        }
+                    })
+                    .attr("href", function(d) { return d.children ? "javascript:void(0);" : d.url; })
+                    .text(function(d) { 
+                        if (d.children) {
+                            var nameSplit = d.name.split('_');
+                            if (nameSplit.length > 1) {
+                                return nameSplit[1];   
+                            } else {
+                                return artists[parseInt(nameSplit[0])];
+                            }
+                        } else {
+                            return d.title;
+                        }
+                    });
+               });
+        }
+    </script>
+    <script type="text/javascript" src="./SampleVis_files/css3-mediaqueries.js"></script>  
+  </body>
+</html>
